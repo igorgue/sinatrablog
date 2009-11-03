@@ -22,7 +22,7 @@ end
 
 helpers do
   include Rack::Utils
-  alias_method :h, :escape_html
+  alias :unsafe :escape_html
 end
 
 load 'controllers/entries.rb'

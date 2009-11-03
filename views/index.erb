@@ -7,14 +7,19 @@
   <body>
     <h1>Superblog!</h1>
 
-    <% @entries.each do |entry| %>
+    <% @posts.each do |post| %>
     <hr>
-      <h2><%= entry.title %></h2>
-      <p><%= entry.body %></p>
-      <p><a href="/delete/?id=<%= entry.id %>">✖ delete</a>?</p>
+      <h2><a href="/posts/<%= post.id %>"><%= post.title %></a></h2>
+      <p><%= unsafe post.body %></p>
+
+      <form name="delete_<%= post.id %>" action="/posts/<%= post.id %>" method="post" accept-charset="utf-8">
+        <input type="hidden" name="_method" value="delete">
+        <input type="hidden" name="id" value="<%= post.id %>">
+        <p><a href="javascript:document.delete_<%= post.id %>.submit()">✖ delete</a>?</p>
+      </form>
     <% end %>
     <hr>
 
-    <p>Add new entries <a href="/add">here</a>.</p>
+    <p>Add new entries <a href="/posts/new">here</a>.</p>
   </body>
 </html>
