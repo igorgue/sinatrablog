@@ -1,16 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<!DOCTYPE HTML>
 <html> 
   <head> 
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="/css/buttons.css" type="text/css" media="screen" charset="utf-8">
   </head>
   <body>
     <h1>Edit <%= @post.title %></h1>
 
     <form action="/posts/<%= @post.id %>" method="post" accept-charset="utf-8">
+      <input type="hidden" name="_method" value="put">
       <p>Title: <input name="title" type="text" value="<%= @post.title %>"></p>
       <p>Body: <textarea name="body"><%= @post.body %></textarea></p>
-      <p><input type="submit" value="Save"></p>
+      <button type="submit" class="green">save</button>
     </form>
   </body>
 </html>

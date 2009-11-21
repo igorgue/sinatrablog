@@ -1,8 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<!DOCTYPE HTML>
 <html> 
   <head> 
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="/css/buttons.css" type="text/css" media="screen" charset="utf-8">
   </head>
   <body>
     <h1><%= @post.title %></h1>
@@ -12,8 +12,8 @@
     <form name="delete_<%= @post.id %>" action="/posts/<%= @post.id %>" method="post" accept-charset="utf-8">
       <input type="hidden" name="_method" value="delete">
       <input type="hidden" name="id" value="<%= @post.id %>">
-      <p><a href="javascript:document.delete_<%= @post.id %>.submit()">✖ delete</a>?</p>
+      <button type="submit" value="delete">✖ delete</button>
     </form>
-    <p><a href="/posts/edit/<%= @post.id %>">edit</a>?</p>
+    <p><a class="button yellow" href="/posts/<%= @post.id %>?edit=true">edit</a></p>
   </body>
 </html>
