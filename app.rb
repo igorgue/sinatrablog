@@ -3,102 +3,100 @@ require 'rubygems'
 require 'sinatra'
 require 'sequel'
 
-module SinatraBlog
-  class App < Sinatra::Default
-    dir = File.dirname(File.expand_path(__FILE__))
+class App < Sinatra::Default
+  dir = File.dirname(File.expand_path(__FILE__))
 
-    set :public, "#{dir}/media"
-    set :static, true
+  set :public, "#{dir}/media"
+  set :static, true
 
-    configure do
-      DB = Sequel.sqlite('blog.db')
+  configure do
+    DB = Sequel.sqlite('blog.db')
 
-      DB.create_table? :posts do
-        primary_key :id
-        varchar :title
-        varchar :body
-      end
-
-      DB.create_table? :tags do
-        primary_key :id
-        varchar :title
-      end
-
-      load "models/blog.rb"
+    DB.create_table? :posts do
+      primary_key :id
+      varchar :title
+      varchar :body
     end
 
-    helpers do
-      include Rack::Utils
-      alias :unsafe :escape_html
+    DB.create_table? :tags do
+      primary_key :id
+      varchar :title
     end
 
-    # index
-    get '/' do
-      @posts = Post.all
+    load "models/blog.rb"
+  end
 
-      erb :index
-    end
+  helpers do
+    include Rack::Utils
+    alias :unsafe :escape_html
+  end
 
-    # new post form
-    get '/posts/new' do
-      erb :new
-    end
+  # index
+  get '/' do
+    @posts = Post.all
 
-    get '/posts/:id?' do
-      @post = Post.find :id => params[:id]
+    erb :index
+  end
 
-      if @post
-        if params[:edit] == "true"
-          erb :edit
-        else
-          erb :show
-        end
+  # new post form
+  get '/posts/new' do
+    erb :new
+  end
+
+  get '/posts/:id?' do
+    @post = Post.find :id => params[:id]
+
+    if @post
+      if params[:edit] == "true"
+        erb :edit
       else
-        redirect "/"
+        erb :show
       end
-    end
-
-    # create a new post
-    post '/posts' do
-      post = Post.find_or_create :title => params[:title], :body => params[:body]
-
-      if post
-        redirect "/posts/#{post.id}"
-      else
-        redirect "/"
-      end
-    end
-
-    put '/posts/:id' do
-      post = Post.find :id => params[:id]
-
-      if post
-        post.title = params[:title]
-        post.body = params[:body]
-
-        post.save
-      end
-
-      redirect "/posts/#{params[:id]}"
-    end
-
-    delete '/posts/:id' do
-      post = Post.find :id => params[:id]
-
-      if post
-        post.destroy
-      end
-
+    else
       redirect "/"
     end
+  end
 
-    # error handling
-    error do
-      erb :status_500
+  # create a new post
+  post '/posts' do
+    post = Post.find_or_create :title => params[:title], :body => params[:body]
+
+    if post
+      redirect "/posts/#{post.id}"
+    else
+      redirect "/"
+    end
+  end
+
+  put '/posts/:id' do
+    post = Post.find :id => params[:id]
+
+    if post
+      post.title = params[:title]
+      post.body = params[:body]
+
+      post.save
     end
 
-    not_found do
-      erb :status_404
+    redirect "/posts/#{params[:id]}"
+  end
+
+  delete '/posts/:id' do
+    post = Post.find :id => params[:id]
+
+    if post
+      post.destroy
     end
+
+    redirect "/"
+  end
+
+  # error handling
+  error do
+    erb :status_500
+  end
+
+  not_found do
+    erb :status_404
   end
 end

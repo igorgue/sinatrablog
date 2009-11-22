@@ -1,2 +1,2 @@
 require "app"
-run SinatraBlog::App
+run App
